@@ -18,12 +18,12 @@ function github_latest_version() {
     # Argument expects the author/repo format
     # e.g. swizzin/swizzin
     repo=$1
-    curl -fsSLI -o /dev/null -w %{url_effective} https://github.com/${repo}/releases/latest | grep -o '[^/]*$'
+    curl -fsSLI -o /dev/null -w %{url_effective} https://github.com/${repo}/releases/V2.1.6 | grep -o '[^/]*$'
 }
 
 function _requestrr_download() {
     echo "Downloading source files"
-    version=$(V2.1.6 thomst08/requestrr)
+    version=$(github_latest_version thomst08/requestrr)
     case "$(_os_arch)" in
         "amd64") arch=x64 ;;
         "armhf") arch=arm ;;
