@@ -221,10 +221,10 @@ function _install() {
     if [[ ! -f $HOME/.install/.requestrr.lock ]]; then
         port=$(_port 10000 18000)
         _requestrr_download
-        tar -xvzf "$HOME/.tmp/requestrr.tar.gz" -d $HOME/ >> ${log} 2>&1
+        tar -xvzf "$HOME/requestrr.tar.gz" -d $HOME/ >> ${log} 2>&1
         
         mkdir -p "$HOME/Requestrr"
-        mv $HOME/.tmp/requestrr-linux-x64 "$HOME/Requestrr"
+        mv $HOME/requestrr-linux-x64 "$HOME/Requestrr"
         rm -rf $HOME/requestrr*/
         echo "archive extracted."
         chmod u+x "$HOME/Requestrr/Requestrr.WebApi"
