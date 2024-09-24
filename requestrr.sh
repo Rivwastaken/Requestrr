@@ -23,7 +23,7 @@ function github_latest_version() {
 
 function _requestrr_download() {
     echo "Downloading source files"
-    version=$(github_latest_version thomst08/requestrr)
+    version=$(V2.1.6 thomst08/requestrr)
     case "$(_os_arch)" in
         "amd64") arch=x64 ;;
         "armhf") arch=arm ;;
@@ -34,10 +34,10 @@ function _requestrr_download() {
             ;;
     esac
     
-    dlurl="https://github.com/thomst08/requestrr/releases/download/${version}/requestrr-linux-${arch}.tar.gz"
+    dlurl="https://github.com/thomst08/requestrr/releases/download/${version}/requestrr-linux-${arch}.zip"
     mkdir -p "$HOME/.tmp"
     
-    if ! curl "$dlurl" -L -o $HOME/.tmp/requestrr.tar.gz >> "$log" 2>&1; then
+    if ! curl "$dlurl" -L -o $HOME/.tmp/requestrr.zip >> "$log" 2>&1; then
         echo "Download failed, exiting"
         exit 1
     fi
@@ -56,7 +56,7 @@ function _get_sonarr_vars() {
         export s_key=$(sed -n 's|\(.*\)<ApiKey>\(.*\)</ApiKey>|\2|p' $HOME/.config/Radarr/config.xml) >> ${log} 2>&1
         echo "Grabbed Sonarr config."
     else
-        export s_port="10766"
+        export s_port="8989"
     fi
 }
 
@@ -70,7 +70,7 @@ function _get_radarr_vars() {
         export r_key=$(sed -n 's|\(.*\)<ApiKey>\(.*\)</ApiKey>|\2|p' $HOME/.config/Radarr/config.xml) >> ${log} 2>&1
         echo "Radarr config has been retrieved."
     else
-        export r_port="12332"
+        export r_port="7878"
     fi
 }
 
@@ -219,8 +219,14 @@ SET
 }
 function _install() {
     if [[ ! -f $HOME/.install/.requestrr.lock ]]; then
-        port=$(_port 10000 18000)
-        
+        port=$(_port 1000 18000)
+        _requestrr_download
+        unzip -q "$HOME/.tmp/requestrr.zip" -d $HOME/ >> ${log} 2>&1
+        rm -rf "$HOME/.tmp/requestrr.zip"
+        mkdir -p "$HOME/Requestrr"
+        mv $HOME/requestrr*/* "$HOME/Requestrr"
+        rm -rf $HOME/requestrr*/
+        echo "archive extracted."
         chmod u+x "$HOME/Requestrr/Requestrr.WebApi"
         find "$HOME/Requestrr" -type d -print -exec chmod 755 {} \; >> ${log} 2>&1
         echo "Requestrr permissions set"
