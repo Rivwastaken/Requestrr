@@ -219,7 +219,7 @@ SET
 }
 function _install() {
     if [[ ! -f $HOME/.install/.requestrr.lock ]]; then
-        port=$(_port 1000 18000)
+        port=$(_port 10000 18000)
         _requestrr_download
         untar.gz -q "$HOME/.tmp/requestrr.tar.gz" -d $HOME/ >> ${log} 2>&1
         rm -rf "$HOME/.tmp/requestrr.tar.gz"
