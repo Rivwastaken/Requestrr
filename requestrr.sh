@@ -224,7 +224,7 @@ function _install() {
         tar -xvzf "$HOME/.tmp/requestrr.tar.gz" -d $HOME/ >> ${log} 2>&1
         rm -rf "$HOME/.tmp/requestrr.tar.gz"
         mkdir -p "$HOME/Requestrr"
-        mv $HOME/requestrr*/* "$HOME/Requestrr"
+        mv $HOME/requestrr-linux-x64 "$HOME/Requestrr"
         rm -rf $HOME/requestrr*/
         echo "archive extracted."
         chmod u+x "$HOME/Requestrr/Requestrr.WebApi"
