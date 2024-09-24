@@ -18,7 +18,7 @@ function github_latest_version() {
     # Argument expects the author/repo format
     # e.g. swizzin/swizzin
     repo=$1
-    curl -fsSLI -o /dev/null -w %{url_effective} https://github.com/${repo}/releases/V2.1.6 | grep -o '[^/]*$'
+    curl -fsSLI -o /dev/null -w %{url_effective} https://github.com/${repo}/releases/latest | grep -o '[^/]*$'
 }
 
 function _requestrr_download() {
@@ -34,10 +34,10 @@ function _requestrr_download() {
             ;;
     esac
     
-    dlurl="https://github.com/thomst08/requestrr/releases/download/${version}/requestrr-linux-${arch}.zip"
+    dlurl="https://github.com/thomst08/requestrr/releases/download/${version}/requestrr-linux-${arch}.tar.gz"
     mkdir -p "$HOME/.tmp"
     
-    if ! curl "$dlurl" -L -o $HOME/.tmp/requestrr.zip >> "$log" 2>&1; then
+    if ! curl "$dlurl" -L -o $HOME/.tmp/requestrr.tar.gz >> "$log" 2>&1; then
         echo "Download failed, exiting"
         exit 1
     fi
@@ -221,8 +221,8 @@ function _install() {
     if [[ ! -f $HOME/.install/.requestrr.lock ]]; then
         port=$(_port 1000 18000)
         _requestrr_download
-        unzip -q "$HOME/.tmp/requestrr.zip" -d $HOME/ >> ${log} 2>&1
-        rm -rf "$HOME/.tmp/requestrr.zip"
+        tar --strip-components=1 -C ~/requestrr -xzvf /home/${user}/requestrr.tar.gz >> "$log" 2>&1
+        rm /home/${user}/requestrr.tar.gz
         mkdir -p "$HOME/Requestrr"
         mv $HOME/requestrr*/* "$HOME/Requestrr"
         rm -rf $HOME/requestrr*/
