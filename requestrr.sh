@@ -22,7 +22,7 @@ function github_latest_version() {
 }
 
 function _requestrr_download() {
-    dlurl="$(curl -sS https://github.com/thomst08/requestrr/releases/latest | jq .tarball_url -r)"
+    dlurl="$(curl -sS https://api.github.com/repos/thomst08/requestrr/releases/latest | jq .tarball_url -r)"
     wget "$dlurl" -q -O /home/${user}/requestrr-linux-x64.tar.gz >> "$log" 2>&1 || {
         echo "Download failed"
         exit 1
