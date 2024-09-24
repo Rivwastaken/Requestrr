@@ -205,8 +205,8 @@ function _install() {
         _requestrr_download
         unzip -q "$HOME/.tmp/requestrr.zip" -d $HOME/ >> ${log} 2>&1
         rm -rf "$HOME/.tmp/requestrr.zip"
-        mkdir -p "$HOME/Requestrr"
-        mv $HOME/requestrr*/* "$HOME/Requestrr"
+        # mkdir -p "$HOME/Requestrr"
+        # mv $HOME/requestrr/* "$HOME/Requestrr"
         rm -rf $HOME/requestrr*/
         echo "archive extracted."
         chmod u+x "$HOME/Requestrr/Requestrr.WebApi"
