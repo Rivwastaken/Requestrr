@@ -23,11 +23,10 @@ function github_latest_version() {
 
 function _requestrr_download() {
     echo "Downloading source files"
-    version=$(github_latest_version thomst08/requestrr)
-    case "$(_os_arch)" in
-        "amd64") arch=x64 ;;
-        "armhf") arch=arm ;;
-        "arm64") arch=arm64 ;;
+    case "$(dpkg --print-architecture)" in
+        "amd64") arch='x86_64' ;;
+        "arm64") arch="arm64" ;;
+        "armhf") arch="armv6" ;;
         *)
             echo "Arch not supported"
             exit 1
