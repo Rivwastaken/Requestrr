@@ -22,30 +22,16 @@ function github_latest_version() {
 }
 
 function _requestrr_download() {
-    echo "Downloading source files"
-    case "$(dpkg --print-architecture)" in
-        "amd64") arch='x86_64' ;;
-        "arm64") arch="arm64" ;;
-        "armhf") arch="armv6" ;;
-        *)
-            echo "Arch not supported"
-            exit 1
-            ;;
-    esac
-    
-    latest=$(curl -sL https://api.github.com/repos/thomst08/requestrr/releases/latest  | grep "linux_$arch" | grep browser_download_url | cut -d \" -f4) || {
-	echo "Failed to query GitHub for latest version"
+    echo "Extracting archive"
+    mkdir -p "$HOME/.local/bin/"
+    # the archive contains both autobrr and autobrrctl to easily setup the user
+    tar xfv "$HOME/.tmp/requestrr.tar.gz" --directory "$HOME/Requestrr/" >> "$log" 2>&1 || {
+        echo "Failed to extract"
         exit 1
     }
-
-    mkdir -p "$HOME/.tmp"
+    # rm -rf "$HOME/.tmp/autobrr.tar.gz"
     
-    if ! curl "$latest" -L -o "$HOME/.tmp/requestrr.tar.gz" >> "$log" 2>&1; then
-        echo "Download failed, exiting"
-        exit 1
-    fi
-    
-    echo "Requestrr downloaded"
+    echo "Requestrr Extracted"
 }
 # shellcheck disable=SC2086
 
