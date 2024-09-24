@@ -202,7 +202,9 @@ SET
 function _install() {
     if [[ ! -f $HOME/.install/.requestrr.lock ]]; then
         port=$(_port 10000 18000)
+        echo "port set"
         # _requestrr_download
+        echo "last line _download"
         # unzip -q "$HOME/.tmp/Requestrr.zip" -d $HOME/ >> ${log} 2>&1
         # rm -rf "$HOME/.tmp/requestrr.zip"
         # mkdir -p "$HOME/Requestrr"
