@@ -221,8 +221,8 @@ function _install() {
     if [[ ! -f $HOME/.install/.requestrr.lock ]]; then
         port=$(_port 1000 18000)
         _requestrr_download
-        unzip -q "$HOME/.tmp/requestrr.zip" -d $HOME/ >> ${log} 2>&1
-        rm -rf "$HOME/.tmp/requestrr.zip"
+        untar.gz -q "$HOME/.tmp/requestrr.tar.gz" -d $HOME/ >> ${log} 2>&1
+        rm -rf "$HOME/.tmp/requestrr.tar.gz"
         mkdir -p "$HOME/Requestrr"
         mv $HOME/requestrr*/* "$HOME/Requestrr"
         rm -rf $HOME/requestrr*/
