@@ -1,8 +1,8 @@
 #!/bin/bash
-export user=$(whoami)
+user=$(whoami)
 mkdir -p "$HOME/.logs/"
 touch "$HOME/.logs/requestrr.log"
-export log="$HOME/.logs/requestrr.log"
+log="$HOME/.logs/requestrr.log"
 
 function _port() {
     LOW_BOUND=$1
@@ -10,15 +10,41 @@ function _port() {
     comm -23 <(seq ${LOW_BOUND} ${UPPER_BOUND} | sort) <(ss -Htan | awk '{print $4}' | cut -d':' -f2 | sort -u) | shuf | head -n 1
 }
 
+function _os_arch() {
+    dpkg --print-architecture
+}
+
+function github_latest_version() {
+    # Argument expects the author/repo format
+    # e.g. swizzin/swizzin
+    repo=$1
+    curl -fsSLI -o /dev/null -w %{url_effective} https://github.com/${repo}/releases/latest | grep -o '[^/]*$'
+}
+
 function _requestrr_download() {
-    dlurl="$(curl -sS https://api.github.com/repos/thomst08/requestrr/releases/latest | jq .tarball_url -r)"
-    wget "$dlurl" -q -O /home/${user}/requestrr-linux-x64.tar.gz >> "$log" 2>&1 || {
-        echo "Download failed"
+    echo "Downloading source files"
+    version=$(github_latest_version thomst08/requestrr)
+    case "$(_os_arch)" in
+        "amd64") arch=x64 ;;
+        "armhf") arch=arm ;;
+        "arm64") arch=arm64 ;;
+        *)
+            echo "Arch not supported"
+            exit 1
+            ;;
+    esac
+    
+    latest=$(curl -sL https://api.github.com/repos/thomst08/requestrr/releases/latest  | grep "linux_$arch" | grep browser_download_url | cut -d \" -f4) || {
+	echo "Failed to query GitHub for latest version"
         exit 1
     }
-    mkdir -p $HOME/requestrr
-    tar --strip-components=1 -C $HOME/requestrr -xzvf /home/${user}/requestrr-linux-x64.tar.gz >> "$log" 2>&1
-    rm /home/${user}/requestrr-linux-x64.tar.gz
+
+    mkdir -p "$HOME/.tmp"
+    
+    if ! curl "$latest" -L -o "$HOME/.tmp/requestrr.tar.gz" >> "$log" 2>&1; then
+        echo "Download failed, exiting"
+        exit 1
+    fi
     
     echo "Requestrr downloaded"
 }
@@ -197,8 +223,10 @@ SET
 }
 function _install() {
     if [[ ! -f $HOME/.install/.requestrr.lock ]]; then
-        port=$(_port 10000 18000)
+        port=$(_port 1000 18000)
         _requestrr_download
+        unzip -q "$HOME/.tmp/requestrr.zip" -d $HOME/ >> ${log} 2>&1
+        rm -rf "$HOME/.tmp/requestrr.zip"
         mkdir -p "$HOME/Requestrr"
         mv $HOME/requestrr*/* "$HOME/Requestrr"
         rm -rf $HOME/requestrr*/
