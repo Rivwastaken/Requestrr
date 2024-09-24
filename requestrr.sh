@@ -22,25 +22,14 @@ function github_latest_version() {
 }
 
 function _requestrr_download() {
-    echo "Downloading source files"
-    version=$(github_latest_version thomst08/requestrr)
-    case "$(_os_arch)" in
-        "amd64") arch=x64 ;;
-        "armhf") arch=arm ;;
-        "arm64") arch=arm64 ;;
-        *)
-            echo "Arch not supported"
-            exit 1
-            ;;
-    esac
-    
-    dlurl="https://github.com/thomst08/requestrr/releases/download/${version}/requestrr-linux-${arch}.tar.gz"
-    mkdir -p "$HOME/.tmp"
-    
-    if ! curl "$dlurl" -L -o $HOME/.tmp/requestrr.tar.gz >> "$log" 2>&1; then
-        echo "Download failed, exiting"
+    dlurl="$(curl -sS https://github.com/thomst08/requestrr/releases/latest | jq .tarball_url -r)"
+    wget "$dlurl" -q -O /home/${user}/requestrr-linux-x64.tar.gz >> "$log" 2>&1 || {
+        echo "Download failed"
         exit 1
-    fi
+    }
+    mkdir -p $HOME/requestrr
+    tar --strip-components=1 -C $HOME/requestrr -xzvf /home/${user}/requestrr-linux-x64.tar.gz >> "$log" 2>&1
+    rm /home/${user}/requestrr-linux-x64.tar.gz
     
     echo "Requestrr downloaded"
 }
