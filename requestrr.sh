@@ -56,7 +56,7 @@ function _get_sonarr_vars() {
         export s_key=$(sed -n 's|\(.*\)<ApiKey>\(.*\)</ApiKey>|\2|p' $HOME/.config/Radarr/config.xml) >> ${log} 2>&1
         echo "Grabbed Sonarr config."
     else
-        export s_port="8989"
+        export s_port="10766"
     fi
 }
 
@@ -70,7 +70,7 @@ function _get_radarr_vars() {
         export r_key=$(sed -n 's|\(.*\)<ApiKey>\(.*\)</ApiKey>|\2|p' $HOME/.config/Radarr/config.xml) >> ${log} 2>&1
         echo "Radarr config has been retrieved."
     else
-        export r_port="7878"
+        export r_port="12332"
     fi
 }
 
@@ -221,7 +221,7 @@ function _install() {
     if [[ ! -f $HOME/.install/.requestrr.lock ]]; then
         port=$(_port 10000 18000)
         _requestrr_download
-        untar.gz -q "$HOME/.tmp/requestrr.tar.gz" -d $HOME/ >> ${log} 2>&1
+        tar -xvzf "$HOME/.tmp/requestrr.tar.gz" -d $HOME/ >> ${log} 2>&1
         rm -rf "$HOME/.tmp/requestrr.tar.gz"
         mkdir -p "$HOME/Requestrr"
         mv $HOME/requestrr*/* "$HOME/Requestrr"
