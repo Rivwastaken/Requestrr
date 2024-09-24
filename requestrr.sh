@@ -208,10 +208,8 @@ SET
 }
 function _install() {
     if [[ ! -f $HOME/.install/.requestrr.lock ]]; then
-        port=$(_port 1000 18000)
+        port=$(_port 10000 18000)
         _requestrr_download
-        tar --strip-components=1 -C ~/requestrr -xzvf /home/${user}/requestrr.tar.gz >> "$log" 2>&1
-        rm /home/${user}/requestrr.tar.gz
         mkdir -p "$HOME/Requestrr"
         mv $HOME/requestrr*/* "$HOME/Requestrr"
         rm -rf $HOME/requestrr*/
