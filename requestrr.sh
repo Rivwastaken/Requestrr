@@ -23,13 +23,6 @@ function github_latest_version() {
 
 function _requestrr_download() {
     echo "Extracting archive"
-    mkdir -p "$HOME/Requestrr/"
-    # the archive contains both autobrr and autobrrctl to easily setup the user
-    tar xfv "$HOME/.tmp/requestrr.tar.gz" --directory "$HOME/Requestrr/" >> "$log" 2>&1 || {
-        echo "Failed to extract"
-        exit 1
-    }
-    # rm -rf "$HOME/.tmp/autobrr.tar.gz"
     
     echo "Requestrr Extracted"
 }
