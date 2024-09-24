@@ -41,7 +41,7 @@ function _requestrr_download() {
 
     mkdir -p "$HOME/.tmp"
     
-    if curl "$latest" -L -o "$HOME/.tmp/requestrr.tar.gz" >> "$log" 2>&1; then
+    if ! curl "$latest" -L -o "$HOME/.tmp/requestrr.tar.gz" >> "$log" 2>&1; then
         echo "Download failed, exiting"
         exit 1
     fi
