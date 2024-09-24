@@ -1,24 +1,13 @@
 #!/bin/bash
-user=$(whoami)
+export user=$(whoami)
 mkdir -p "$HOME/.logs/"
 touch "$HOME/.logs/requestrr.log"
-log="$HOME/.logs/requestrr.log"
+export log="$HOME/.logs/requestrr.log"
 
 function _port() {
     LOW_BOUND=$1
     UPPER_BOUND=$2
     comm -23 <(seq ${LOW_BOUND} ${UPPER_BOUND} | sort) <(ss -Htan | awk '{print $4}' | cut -d':' -f2 | sort -u) | shuf | head -n 1
-}
-
-function _os_arch() {
-    dpkg --print-architecture
-}
-
-function github_latest_version() {
-    # Argument expects the author/repo format
-    # e.g. swizzin/swizzin
-    repo=$1
-    curl -fsSLI -o /dev/null -w %{url_effective} https://github.com/${repo}/releases/latest | grep -o '[^/]*$'
 }
 
 function _requestrr_download() {
